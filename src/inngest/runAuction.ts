@@ -1,5 +1,10 @@
 import { inngest } from "./client";
-import { openAuction, closeAuction } from "../lib/auctions";
+import {
+  openAuction,
+  closeAuction,
+  getAuctionWinningBid,
+} from "../lib/auctions";
+import { getUser } from "../lib/users";
 import email from "../lib/email";
 
 /*
@@ -18,7 +23,22 @@ export default inngest.createFunction(
   "Run auction",
   "app/auction.created",
   async ({ event, step }) => {
-    openAuction();
-    closeAuction();
+    await step.sleepUntil(new Date(event.data.start_time));
+
+    await step.run("Start auction", async () => {
+      return await openAuction(event.data.auction_id);
+    });
+
+    await step.sleepUntil(new Date(event.data.end_time));
+
+    await step.run("End auction", async () => {
+      return await closeAuction(event.data.auction_id);
+    });
+
+    await step.run("Send winning bid notification", async () => {
+      const winningBid = await getAuctionWinningBid(event.data.auction_id);
+      const user = await getUser(event.data.user_id);
+      await email.send("auction_closed", user.email, { winningBid });
+    });
   }
 );

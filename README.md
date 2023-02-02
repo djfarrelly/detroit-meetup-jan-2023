@@ -1,5 +1,7 @@
 # Inngest - Detroit Meetup - Jan 2023
 
+> ⚠️ This is using the Inngest SDK beta version 1.x and a pre-release version of the Inngest dev server ([pull request](https://github.com/inngest/inngest/pull/351)) which should be merged and live by ~Feb 7, 2023 ⚠️
+
 ```bash
 yarn dev
 ```

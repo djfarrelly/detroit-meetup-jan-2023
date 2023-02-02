@@ -18,7 +18,7 @@ export default inngest.createFunction(
     });
 
     // Sleep for 3 days
-    await step.sleep("3d");
+    await step.sleep("10s");
 
     // Send them another email with info on how to get the most out of the product
     await step.run("Send activation email", async () => {
